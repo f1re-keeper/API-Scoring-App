@@ -13,7 +13,7 @@ import lombok.*;
 public class Result {
     @NotNull(message = "Name must not be null")
     private String name;
-
+//
     @NotNull(message = "Weight must not be null")
     private int weight;
 
