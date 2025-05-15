@@ -14,7 +14,6 @@ public class Result {
     @NotNull(message = "Name must not be null")
     private String name;
 
-    //testing changes
     @NotNull(message = "Weight must not be null")
     private int weight;
 
