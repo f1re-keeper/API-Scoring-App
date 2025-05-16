@@ -12,8 +12,8 @@ import java.util.*;
 @Getter
 @Setter
 public class Result {
-    @NotNull(message = "totalScore should not be null.")
-    private int totalScore;
+    @NotNull(message = "score should not be null.")
+    private int score;
     @NotNull(message = "ruleBreakdown should not be null.")
     private Map<String, Integer> ruleBreakdown;
     @NotNull(message = "feedback should not be null.")
