@@ -1,8 +1,10 @@
 package org.example.theneoassignment.Controller;
 
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import org.example.theneoassignment.Model.Report;
+import org.example.theneoassignment.Model.Result;
 import org.example.theneoassignment.Service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +19,14 @@ public class ScoreController {
     ScoreService scoreService;
 
     @PostMapping
-    public Report scoreSpec(@RequestBody String openApiSpec) {
-        SwaggerParseResult result = new OpenAPIV3Parser().readContents(openApiSpec, null, null);
-        if (result.getMessages() != null && !result.getMessages().isEmpty()) {
-            throw new IllegalArgumentException("Invalid OpenAPI Spec:\n" + result.getMessages());
+    public Result scoreSpec(@RequestBody String openApiSpec) {
+        SwaggerParseResult parseResult = new OpenAPIV3Parser().readContents(openApiSpec, null, null);
+        OpenAPI openAPI = parseResult.getOpenAPI();
+
+        if (openAPI == null) {
+            throw new IllegalArgumentException("Invalid OpenAPI specification.");
         }
-        return scoreService.score(result.getOpenAPI());
+
+        return scoreService.score(openAPI);
     }
 }

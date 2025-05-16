@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -11,15 +12,10 @@ import lombok.*;
 @Getter
 @Setter
 public class Result {
-    @NotNull(message = "Name must not be null")
-    private String name;
-
-    @NotNull(message = "Weight must not be null")
-    private int weight;
-
-    @NotNull(message = "Score must not be null")
-    private int score;
-
-    @NotNull(message = "Issues must not be null")
-    private int issues;
+    @NotNull(message = "totalScore should not be null.")
+    private int totalScore;
+    @NotNull(message = "ruleBreakdown should not be null.")
+    private Map<String, Integer> ruleBreakdown;
+    @NotNull(message = "feedback should not be null.")
+    private String feedback;
 }
