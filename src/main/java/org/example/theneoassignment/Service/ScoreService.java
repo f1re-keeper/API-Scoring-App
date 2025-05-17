@@ -30,11 +30,11 @@ public class ScoreService {
             int ruleScore = rule.calculateScore(openAPI, feedback);
             totalScore += ruleScore;
             details.put(rule.getName(), ruleScore);
-            Result res = new Result(totalScore, details, feedback.toString());
-            report.add(res);
         }
 
-        report.getGrade();
+        Result res = new Result(totalScore, details, feedback.toString());
+        report.setResult(res);
+        report.calculateGrade();
         return report;
     }
 }
