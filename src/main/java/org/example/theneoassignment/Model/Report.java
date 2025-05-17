@@ -11,6 +11,7 @@ import java.util.*;
 @Setter
 public class Report {
     private List<Result> results = new ArrayList<>();
+    private String grade = "";
 
     public void add(Result result) {
         results.add(result);
@@ -33,9 +34,9 @@ public class Report {
         return Collections.max(scores);
     }
 
-    public String getGrade() {
+    public void getGrade() {
         double pct = (double) getTotalScore() / getMaxScore() * 100;
-        return pct >= 90 ? "A" :
+        grade = pct >= 90 ? "A" :
                 pct >= 80 ? "B" :
                         pct >= 70 ? "C" :
                                 pct >= 60 ? "D" : "F";

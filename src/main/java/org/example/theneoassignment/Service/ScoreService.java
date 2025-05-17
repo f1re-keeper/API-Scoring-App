@@ -20,17 +20,21 @@ public class ScoreService {
             new MiscScore()
     );
 
-    public Result score(OpenAPI openAPI) {
+    public Report score(OpenAPI openAPI) {
         StringBuilder feedback = new StringBuilder();
         int totalScore = 0;
         Map<String, Integer> details = new LinkedHashMap<>();
+        Report report = new Report();
 
         for (RuleBasis rule : rules) {
             int ruleScore = rule.calculateScore(openAPI, feedback);
             totalScore += ruleScore;
             details.put(rule.getName(), ruleScore);
+            Result res = new Result(totalScore, details, feedback.toString());
+            report.add(res);
         }
 
-        return new Result(totalScore, details, feedback.toString());
+        report.getGrade();
+        return report;
     }
 }

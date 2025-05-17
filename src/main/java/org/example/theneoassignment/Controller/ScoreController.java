@@ -7,10 +7,7 @@ import org.example.theneoassignment.Model.Report;
 import org.example.theneoassignment.Model.Result;
 import org.example.theneoassignment.Service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/score")
@@ -19,7 +16,7 @@ public class ScoreController {
     ScoreService scoreService;
 
     @PostMapping
-    public Result scoreSpec(@RequestBody String openApiSpec) {
+    public Report scoreSpec(@RequestBody String openApiSpec) {
         SwaggerParseResult parseResult = new OpenAPIV3Parser().readContents(openApiSpec, null, null);
         OpenAPI openAPI = parseResult.getOpenAPI();
 
