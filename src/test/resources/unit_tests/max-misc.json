@@ -1,0 +1,39 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Misc Pass API",
+    "version": "1.0"
+  },
+  "servers": [{
+    "url": "https://api.example.com"
+  }],
+  "tags": [{
+    "name": "example"
+  }],
+  "components": {
+    "schemas": {
+      "Example": {
+        "type": "object"
+      }
+    }
+  },
+  "paths": {
+    "/invalid-schema": {
+      "post": {
+        "operationId": "createInvalid",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

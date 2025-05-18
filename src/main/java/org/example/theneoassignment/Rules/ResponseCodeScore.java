@@ -28,6 +28,10 @@ public class ResponseCodeScore implements RuleBasis{
             for (Operation operation : entry.getValue().readOperations()) {
                 totalOps++;
                 Map<String, ApiResponse> responses = operation.getResponses();
+                if(responses == null) {
+                    feedback.append("No response codes: ").append(entry.getKey()).append(".");
+                    continue;
+                }
                 boolean hasUsefulCodes = responses.keySet().stream().anyMatch(code ->
                         code.startsWith("2") || code.startsWith("4") || code.startsWith("5")
                 );

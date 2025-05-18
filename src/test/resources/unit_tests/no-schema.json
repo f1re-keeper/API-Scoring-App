@@ -1,0 +1,19 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "No Schema API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/void": {
+      "get": {
+        "operationId": "getVoid",
+        "responses": {
+          "200": {
+            "description": "Nothing here"
+          }
+        }
+      }
+    }
+  }
+}

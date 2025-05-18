@@ -1,0 +1,29 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Test API",
+    "version": "1.0.0",
+    "description": "Includes examples"
+  },
+  "paths": {
+    "/orders": {
+      "get": {
+        "operationId": "getOrders",
+        "summary": "Get orders",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "abc123",
+                  "total": 42.0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Test API",
+    "version": "1.0.0",
+    "description": "Bad naming"
+  },
+  "paths": {
+    "/users/do_create": {
+      "post": {
+        "operationId": "doUserCreate",
+        "summary": "Do something weird",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

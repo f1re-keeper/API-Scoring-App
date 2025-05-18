@@ -24,6 +24,7 @@ public class ReqResScore implements RuleBasis{
         if (openAPI.getPaths() != null) {
             for (var entry : openAPI.getPaths().entrySet()) {
                 for (var op : entry.getValue().readOperations()) {
+                    if(op.getResponses() == null) break;
                     boolean hasExample =
                             (op.getRequestBody() != null && op.getRequestBody().getContent() != null &&
                                     op.getRequestBody().getContent().values().stream().anyMatch(media ->

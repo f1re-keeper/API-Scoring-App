@@ -19,6 +19,10 @@ public class ScoreController {
 
     @PostMapping
     public Report scoreSpec(@RequestBody String openApiSpec) {
+        if (openApiSpec == null || openApiSpec.trim().isEmpty()) {
+            throw new IllegalArgumentException("Request body cannot be empty");
+        }
+
         SwaggerParseResult parseResult = new OpenAPIV3Parser().readContents(openApiSpec, null, null);
         OpenAPI openAPI = parseResult.getOpenAPI();
 

@@ -1,0 +1,33 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Path Edge Cases API",
+    "version": "1.0"
+  },
+  "paths": {
+    "invalid-path": {},
+
+    "/no-op": {},
+
+    "/duplicate": {
+      "get": {
+        "operationId": "dupOpId",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/also-duplicate": {
+      "post": {
+        "operationId": "dupOpId",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  }
+}

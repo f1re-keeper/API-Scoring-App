@@ -1,0 +1,30 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Descriptive API",
+    "version": "1.0",
+    "description": "This API includes complete descriptions"
+  },
+  "paths": {
+    "/items": {
+      "get": {
+        "operationId": "getItems",
+        "summary": "Get items",
+        "description": "Returns a list of items",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        },
+        "parameters": [{
+          "name": "type",
+          "in": "query",
+          "description": "Filter by type",
+          "schema": {
+            "type": "string"
+          }
+        }]
+      }
+    }
+  }
+}

@@ -10,6 +10,7 @@ import java.util.*;
 
 @Service
 public class ScoreService {
+    Map<String, Double> details = new LinkedHashMap<>();
     private final List<RuleBasis> rules = List.of(
             new SchemaScore(),
             new DescriptionScore(),
