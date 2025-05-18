@@ -13,9 +13,9 @@ import java.util.*;
 @Setter
 public class Result {
     @NotNull(message = "score should not be null.")
-    private int score;
+    private double score;
     @NotNull(message = "ruleBreakdown should not be null.")
-    private Map<String, Integer> ruleBreakdown;
+    private Map<String, Double> ruleBreakdown;
     @NotNull(message = "feedback should not be null.")
     private String feedback;
 }

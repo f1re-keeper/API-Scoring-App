@@ -19,21 +19,27 @@ public class ResponseCodeScore implements RuleBasis{
     }
 
     @Override
-    public int calculateScore(OpenAPI openAPI, StringBuilder feedback) {
+    public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
         int validOps = 0;
+        int totalOps = 0;
         if (openAPI.getPaths() == null) return 0;
 
         for (Map.Entry<String, PathItem> entry : openAPI.getPaths().entrySet()) {
             for (Operation operation : entry.getValue().readOperations()) {
+                totalOps++;
                 Map<String, ApiResponse> responses = operation.getResponses();
-                if (responses == null || !responses.containsKey("200")) {
-                    feedback.append("No 200 response for operation: ").append(entry.getKey()).append("\n");
+                boolean hasUsefulCodes = responses.keySet().stream().anyMatch(code ->
+                        code.startsWith("2") || code.startsWith("4") || code.startsWith("5")
+                );
+                if (responses.isEmpty() || !hasUsefulCodes) {
+                    feedback.append("No response codes: ").append(entry.getKey()).append(".");
                 } else {
                     validOps++;
                 }
             }
         }
-
-        return Math.min(getWeight(), validOps);
+        double score = ((validOps / (double) totalOps) * getWeight());
+        if(score!=getWeight()) feedback.append("Lacking useful codes.");
+        return score;
     }
 }

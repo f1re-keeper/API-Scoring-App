@@ -7,5 +7,5 @@ public interface RuleBasis {
 
     int getWeight();
 
-    int calculateScore(OpenAPI openAPI, StringBuilder feedback);
+    double calculateScore(OpenAPI openAPI, StringBuilder feedback);
 }

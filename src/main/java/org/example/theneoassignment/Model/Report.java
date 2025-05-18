@@ -13,12 +13,12 @@ public class Report {
     private Result result;
     private String grade = "";
 
-    public int getTotalScore() {
+    public double getTotalScore() {
         return result.getScore();
     }
 
     public void calculateGrade() {
-        double pct = (double) getTotalScore() / 100;
+        double pct = getTotalScore();
         grade = pct >= 90 ? "A" :
                 pct >= 80 ? "B" :
                         pct >= 70 ? "C" :

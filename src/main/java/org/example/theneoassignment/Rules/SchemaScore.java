@@ -17,7 +17,7 @@ public class SchemaScore implements RuleBasis{
     }
 
     @Override
-    public int calculateScore(OpenAPI openAPI, StringBuilder feedback) {
+    public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
         if (openAPI.getComponents() == null || openAPI.getComponents().getSchemas() == null) {
             feedback.append("Schemas are not defined.\n");
             return 0;
@@ -26,13 +26,14 @@ public class SchemaScore implements RuleBasis{
         int valid = 0;
         for (Map.Entry<String, Schema> entry : openAPI.getComponents().getSchemas().entrySet()) {
             Schema schema = entry.getValue();
-            if (schema.getType() == null) {
-                feedback.append("Schema `" + entry.getKey() + "` is missing a type.\n");
-            } else {
+            if (schema.getType() != null || schema.get$ref() != null || (schema.getProperties() != null && !schema.getProperties().isEmpty())) {
                 valid++;
+            } else {
+                feedback.append("Schema `").append(entry.getKey()).append("` is incomplete or missing type.");
             }
         }
 
-        return Math.min(getWeight(), valid);
+        if(valid != getWeight()) feedback.append("Missing some Schemas.");
+        return (int) ((valid / (double) openAPI.getComponents().getSchemas().size()) * getWeight());
     }
 }

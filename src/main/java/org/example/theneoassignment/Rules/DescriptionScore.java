@@ -14,7 +14,7 @@ public class DescriptionScore implements RuleBasis {
     }
 
     @Override
-    public int calculateScore(OpenAPI openAPI, StringBuilder feedback) {
+    public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
         int issues = 0;
         if (openAPI.getPaths() != null) {
             for (var entry : openAPI.getPaths().entrySet()) {
@@ -29,6 +29,7 @@ public class DescriptionScore implements RuleBasis {
             }
         }
         int score = Math.max(0, 20 - issues * 2);
+        if(score != getWeight()) feedback.append("Missing some descriptions.");
         return Math.min(getWeight(), score);
     }
 }

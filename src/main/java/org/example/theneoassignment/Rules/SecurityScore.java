@@ -14,12 +14,12 @@ public class SecurityScore implements RuleBasis{
     }
 
     @Override
-    public int calculateScore(OpenAPI openAPI, StringBuilder feedback) {
+    public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
         if (openAPI.getComponents() != null && openAPI.getComponents().getSecuritySchemes() != null
                 && !openAPI.getComponents().getSecuritySchemes().isEmpty()) {
             return getWeight();
         }
-        feedback.append("No security schemes defined.\n");
+        feedback.append("No security schemes defined.");
         return 0;
     }
 }

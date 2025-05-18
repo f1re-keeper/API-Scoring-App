@@ -22,12 +22,12 @@ public class ScoreService {
 
     public Report score(OpenAPI openAPI) {
         StringBuilder feedback = new StringBuilder();
-        int totalScore = 0;
-        Map<String, Integer> details = new LinkedHashMap<>();
+        double totalScore = 0;
+        Map<String, Double> details = new LinkedHashMap<>();
         Report report = new Report();
 
         for (RuleBasis rule : rules) {
-            int ruleScore = rule.calculateScore(openAPI, feedback);
+            double ruleScore = rule.calculateScore(openAPI, feedback);
             totalScore += ruleScore;
             details.put(rule.getName(), ruleScore);
         }
