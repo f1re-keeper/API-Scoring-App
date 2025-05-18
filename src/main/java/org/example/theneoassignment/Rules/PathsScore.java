@@ -21,41 +21,52 @@ public class PathsScore implements RuleBasis{
     @Override
     public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
         if (openAPI.getPaths() == null) {
-            feedback.append("No paths defined.\n");
+            feedback.append("No paths defined.");
             return 0;
         }
 
-        int score = 0;
+        int validOps = 0;
+        int totalOps = 0;
         Set<String> operationIds = new HashSet<>();
-        Pattern crudPattern = Pattern.compile("^(get|list|create|update|delete).+", Pattern.CASE_INSENSITIVE);
+        Pattern crudPattern = Pattern.compile("(?i)^(get|list|create|update|delete|find|add|remove|post|put|patch)[A-Z_].*");
 
         for (Map.Entry<String, PathItem> entry : openAPI.getPaths().entrySet()) {
             String path = entry.getKey();
             if (!path.startsWith("/")) {
-                feedback.append("Path does not start with '/': ").append(path).append("\n");
-                continue;
+                feedback.append("Path does not start with '/': ").append(path).append(". ");
             }
 
             PathItem item = entry.getValue();
             List<Operation> operations = item.readOperations();
             if (operations == null || operations.isEmpty()) {
-                feedback.append("No operations defined for path: ").append(path).append("\n");
+                feedback.append("No operations defined for path: ").append(path).append(". ");
                 continue;
             }
 
             for (Operation op : operations) {
+                totalOps++;
                 String opId = op.getOperationId();
                 if (opId == null || !crudPattern.matcher(opId).matches()) {
-                    feedback.append("Operation ID does not follow CRUD naming: ").append(path).append("\n");
-                } else if (!operationIds.add(opId)) {
-                    feedback.append("Duplicate operation ID: ").append(opId).append("\n");
+                    feedback.append("Operation ID does not follow CRUD naming: ").append(path).append(". ");
                 } else {
-                    score++;
+                    validOps++;
+                }
+
+                if (opId != null && !operationIds.add(opId)) {
+                    feedback.append("Duplicate operation ID: ").append(opId).append(". ");
                 }
             }
         }
 
-        if (score < getWeight()/3) feedback.append("Too few valid operations defined.\n");
-        return Math.min(getWeight(), score);
+        if (totalOps == 0) return 0;
+
+        double ratio = (double) validOps / totalOps;
+        double score = ratio * getWeight();
+
+        if (ratio < 0.5) return getWeight() / 3.0;
+        if (ratio < 0.75) return getWeight() / 2.0;
+
+        return score;
     }
+
 }

@@ -7,8 +7,10 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SchemaScore implements RuleBasis{
     @Override
@@ -23,40 +25,40 @@ public class SchemaScore implements RuleBasis{
 
     @Override
     public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
-        int validSchemas = 0;
-        int totalSchemas = 0;
+        AtomicInteger validSchemas = new AtomicInteger(0);
+        AtomicInteger totalSchemas = new AtomicInteger(0);
 
         componentSchemaScore(openAPI, feedback, validSchemas, totalSchemas);
 
         if (openAPI.getPaths() != null) {
             for (PathItem pathItem : openAPI.getPaths().values()) {
                 for (Operation op : pathItem.readOperations()) {
-                    responseSchemas(openAPI, feedback, op, totalSchemas, validSchemas);
-                    requestSchemas(openAPI, feedback, op, totalSchemas, validSchemas);
-                    parameterSchemas(openAPI, feedback, op, totalSchemas, validSchemas);
+                    responseSchemas(op, totalSchemas, validSchemas);
+                    requestSchemas(op, totalSchemas, validSchemas);
+                    parameterSchemas(op, totalSchemas, validSchemas);
                 }
             }
         }
 
-        if (totalSchemas == 0) {
+        if (totalSchemas.get() == 0) {
             feedback.append("No schemas found in components or inline.");
             return 0;
         }
 
-        double ratio = (double) validSchemas / totalSchemas;
-        double score = Math.round(ratio * getWeight());
+        double ratio = (double) validSchemas.get() / totalSchemas.get();
+        double score = ratio * getWeight();
         if (score != getWeight()) feedback.append("Some schemas are incomplete or missing.");
         return score;
     }
 
     private void componentSchemaScore(OpenAPI openAPI, StringBuilder feedback,
-                                      int validSchemas, int totalSchemas){
+                                      AtomicInteger validSchemas, AtomicInteger totalSchemas){
         if (openAPI.getComponents() != null && openAPI.getComponents().getSchemas() != null) {
             for (Map.Entry<String, Schema> entry : openAPI.getComponents().getSchemas().entrySet()) {
                 Schema schema = entry.getValue();
-                totalSchemas++;
+                totalSchemas.incrementAndGet();
                 if (isValidSchema(schema)) {
-                    validSchemas++;
+                    validSchemas.incrementAndGet();
                 } else {
                     feedback.append("Component schema `").append(entry.getKey()).append("` is incomplete.");
                 }
@@ -64,17 +66,17 @@ public class SchemaScore implements RuleBasis{
         }
     }
 
-    private void responseSchemas(OpenAPI openAPI, StringBuilder feedback, Operation op,
-                                 int totalSchemas, int validSchemas){
+    private void responseSchemas(Operation op,
+                                 AtomicInteger totalSchemas, AtomicInteger validSchemas){
         if (op.getResponses() != null) {
             for (ApiResponse resp : op.getResponses().values()) {
                 if (resp.getContent() != null) {
                     for (MediaType media : resp.getContent().values()) {
                         Schema schema = media.getSchema();
+                        totalSchemas.incrementAndGet();
                         if (schema != null) {
-                            totalSchemas++;
                             if (isValidSchema(schema)) {
-                                validSchemas++;
+                                validSchemas.incrementAndGet();
                             }
                         }
                     }
@@ -83,30 +85,29 @@ public class SchemaScore implements RuleBasis{
         }
     }
 
-    private void requestSchemas(OpenAPI openAPI, StringBuilder feedback, Operation op,
-                                int totalSchemas, int validSchemas){
+    private void requestSchemas(Operation op, AtomicInteger totalSchemas, AtomicInteger validSchemas){
         if (op.getRequestBody() != null && op.getRequestBody().getContent() != null) {
             for (MediaType media : op.getRequestBody().getContent().values()) {
                 Schema schema = media.getSchema();
+                totalSchemas.incrementAndGet();
+
                 if (schema != null) {
-                    totalSchemas++;
                     if (isValidSchema(schema)) {
-                        validSchemas++;
+                        validSchemas.incrementAndGet();
                     }
                 }
             }
         }
     }
 
-    private void parameterSchemas(OpenAPI openAPI, StringBuilder feedback, Operation op,
-                                  int totalSchemas, int validSchemas){
+    private void parameterSchemas(Operation op, AtomicInteger totalSchemas, AtomicInteger validSchemas){
         if (op.getParameters() != null) {
             for (Parameter param : op.getParameters()) {
                 Schema schema = param.getSchema();
+                totalSchemas.incrementAndGet();
                 if (schema != null) {
-                    totalSchemas++;
                     if (isValidSchema(schema)) {
-                        validSchemas++;
+                        validSchemas.incrementAndGet();
                     }
                 }
             }
