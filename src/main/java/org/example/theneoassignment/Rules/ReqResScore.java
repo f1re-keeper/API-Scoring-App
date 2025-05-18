@@ -19,28 +19,32 @@ public class ReqResScore implements RuleBasis{
 
     @Override
     public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
-        int exampleCount = 0;
+        int count = 0;
 
-        if (openAPI.getPaths() == null) return 0;
+        if (openAPI.getPaths() != null) {
+            for (var entry : openAPI.getPaths().entrySet()) {
+                for (var op : entry.getValue().readOperations()) {
+                    boolean hasExample =
+                            (op.getRequestBody() != null && op.getRequestBody().getContent() != null &&
+                                    op.getRequestBody().getContent().values().stream().anyMatch(media ->
+                                            media.getExamples() != null || media.getExample() != null)) ||
+                                    op.getResponses().values().stream().anyMatch(resp ->
+                                            resp.getContent() != null && resp.getContent().values().stream().anyMatch(media ->
+                                                    media.getExamples() != null || media.getExample() != null));
 
-        for (Map.Entry<String, PathItem> entry : openAPI.getPaths().entrySet()) {
-            for (Operation op : entry.getValue().readOperations()) {
-                boolean hasExample =
-                        (op.getRequestBody() != null && op.getRequestBody().getContent() != null &&
-                                op.getRequestBody().getContent().values().stream().anyMatch(media ->
-                                        media.getExamples() != null || media.getExample() != null
-                                )
-                        ) || op.getResponses().values().stream().anyMatch(resp ->
-                                resp.getContent() != null && resp.getContent().values().stream().anyMatch(media ->
-                                        media.getExamples() != null || media.getExample() != null
-                                )
-                        );
-                if (hasExample) exampleCount++;
-                else feedback.append("No examples in ").append(entry.getKey()).append(".");
+                    if (hasExample) count++;
+                }
             }
         }
 
-        if(exampleCount != getWeight()) feedback.append("Lacking Request/Response examples.");
-        return Math.min(getWeight(), exampleCount);
+        if (count < 1) {
+            feedback.append("No examples provided in request/response bodies.\n");
+            return 0;
+        } else if (count < getWeight()/2) {
+            feedback.append("Only a few examples provided.\n");
+            return 5;
+        } else {
+            return getWeight();
+        }
     }
 }

@@ -28,7 +28,7 @@ public class DescriptionScore implements RuleBasis {
                 }
             }
         }
-        int score = Math.max(0, 20 - issues * 2);
+        int score = Math.max(0, getWeight() - issues * 2);
         if(score != getWeight()) feedback.append("Missing some descriptions.");
         return Math.min(getWeight(), score);
     }
