@@ -1,8 +1,6 @@
 package org.example.theneoassignment;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.parser.OpenAPIV3Parser;
 import org.example.theneoassignment.Controller.ScoreController;
 import org.example.theneoassignment.Model.*;
 import org.example.theneoassignment.Service.ScoreService;
@@ -14,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,8 +33,6 @@ public class TestScoreController {
 
     @MockBean
     private ScoreService scoreService;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private String loadAPI() throws IOException {
         InputStream is = getClass().getClassLoader().getResourceAsStream("unit_tests/max-schemas.json");
