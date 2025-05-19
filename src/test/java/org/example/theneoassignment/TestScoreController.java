@@ -57,4 +57,15 @@ public class TestScoreController {
                         .content(""))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void invalidSpecTest() throws Exception {
+        String invalidSpec = "{ not: openapi }";
+
+        mockMvc.perform(post("/api/score")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidSpec))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("400 BAD_REQUEST \"OpenAPI spec cannot be null.\""));
+    }
 }

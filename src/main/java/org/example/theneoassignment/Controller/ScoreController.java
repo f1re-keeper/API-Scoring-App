@@ -8,7 +8,9 @@ import org.example.theneoassignment.Service.ScoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/score")
@@ -22,7 +24,7 @@ public class ScoreController {
     public Report scoreSpec(@RequestBody String openApiSpec) {
         if (openApiSpec == null || openApiSpec.trim().isEmpty()) {
             logger.info("Bad request body.");
-            throw new IllegalArgumentException("Request body cannot be empty.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body cannot be empty.");
         }
 
         logger.info("Parsing OpenAPI spec.");
@@ -30,7 +32,7 @@ public class ScoreController {
         OpenAPI openAPI = parseResult.getOpenAPI();
 
         if (openAPI == null) {
-            throw new IllegalArgumentException("Invalid OpenAPI specification.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "OpenAPI spec cannot be null.");
         }
 
         logger.info("Grading OpenAPI spec.");
