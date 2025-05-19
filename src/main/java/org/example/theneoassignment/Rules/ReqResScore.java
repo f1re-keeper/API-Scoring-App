@@ -49,9 +49,6 @@ public class ReqResScore implements RuleBasis{
         if (count == 0) {
             feedback.append("No examples provided in request/response bodies. ");
             return 0;
-        } else if (count < getWeight()/2) {
-            feedback.append("Only a few examples provided. ");
-            return 5;
         } else {
             return (double)count / totalOps * getWeight();
         }
