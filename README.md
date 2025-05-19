@@ -4,7 +4,8 @@
 1. [About Application](#about-application)
 2. [Scoring](#scoring)
 3. [Setup](#setup)
-4. [Testing](#testing)
+4. [API Endpoints](#api-endpoints)
+5. [Testing](#testing)
 
 ## About Application
 This Spring Boot application takes an OpenAPI (v3.x) spec in JSON, evaluates its structure and content against industry best practices, and provides a score for each criterion with clear, actionable feedback. This application uses Swagger parser. 
