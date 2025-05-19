@@ -47,9 +47,9 @@ To start the application you need to run:
 ```
 mvn spring-boot:run
 ```
-### (Optional, but recommended) Postman
-To run the application with Postman, write `http://localhost:8000/api/score` in the address bar. Choose POST request, then go to `Body` and choose `raw` and `JSON` for file types.
-Input the OpenAPI spec in JSON to send the request.
+### API Platform
+I personally used Postman while working on this project because I already have some experience with Postman, but you can use any API Platform. I'm gonna write Postman-specific instructions here because that's the platform I'm familiar with, but these instructions will still help you navigate other platforms. To run the application with Postman, write `http://localhost:8000/api/score` in the address bar. Choose POST request, then go to `Body` and choose `raw` and `JSON` for file types.
+Input the OpenAPI spec in JSON text box to send the request.
 
 ## **API Endpoints**
 ### POST: /api/score
