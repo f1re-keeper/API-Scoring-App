@@ -55,8 +55,25 @@ Input the OpenAPI spec in JSON to send the request.
 ### POST: /api/score
 Sends the scorecard
 **Example:**
+Let's use one of the files I have added in the tests folder (just for this example): [https://github.com/f1re-keeper/API-Scoring-App/blob/master/src/test/resources/samples/1password.json] - OpenAPI spec for `1password.com/events/1.2.0`
+This is the resulting scorecard:
 ```
-
+{
+    "grade": "B",
+    "result": {
+        "score": 83.69047619047619,
+        "ruleBreakdown": {
+            "Schema & Types (20 pts)": 16.19047619047619,
+            "Descriptions & Documentation (20 pts)": 20.0,
+            "Response Codes (15 pts)": 15.0,
+            "Security Schemes (10 pts)": 10.0,
+            "Request/Response Examples (10 pts)": 0.0,
+            "Paths & Operations (15 pts)": 15.0,
+            "Miscellaneous Best Practices (10 pts)": 7.5
+        },
+        "feedback": "Component schema `AuditEventItems` is incomplete. Component schema `CursorCollection` is incomplete. Component schema `ItemUsageItems` is incomplete. Component schema `SignInAttemptItems` is incomplete. Some schemas are incomplete or missing. No examples provided in request/response bodies. Tags not found. "
+    }
+}
 ```
 **Response for valid input:**
 ```
@@ -68,9 +85,7 @@ HTTP/1.1 400 BAD REQUEST
 ```
 
 ## Testing
-You can see the tests in `src/test/java/org.example.theneoassignment`. These tests also use custom JSON files located in `src/test/resources/unit_tests` for Unit Tests that test each scoring criterion and `src/test/resources/samples` contain actual public OpenAPI sample specs. These public samples were taken from `https://github.com/APIs-guru/openapi-directory/tree/main`. Run the tests with:
+You can see the tests in `src/test/java/org.example.theneoassignment`. These tests also use custom JSON files located in `src/test/resources/unit_tests` for Unit Tests that test each scoring criterion and `src/test/resources/samples` contain actual public OpenAPI sample specs. These public samples were taken from [https://github.com/APIs-guru/openapi-directory/tree/main]. Run the tests with:
 ```
 mvn test
 ```
-
-
