@@ -55,7 +55,7 @@ Input the OpenAPI spec in JSON to send the request.
 ### POST: /api/score
 Sends the scorecard
 **Example:**
-Let's use one of the files I have added in the tests folder (just for this example): [https://github.com/f1re-keeper/API-Scoring-App/blob/master/src/test/resources/samples/1password.json] - OpenAPI spec for `1password.com/events/1.2.0`
+Let's use one of the files I have added in the tests folder (just for this example): [https://github.com/f1re-keeper/API-Scoring-App/blob/master/src/test/resources/samples/1password.json] - OpenAPI spec for `1password.com/events/1.2.0`.
 This is the resulting scorecard:
 ```
 {
