@@ -7,7 +7,6 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SchemaScore implements RuleBasis{
     @Override
     public String getName() {
-        return "Schema & Types";
+        return "Schema & Types (20 pts)";
     }
 
     @Override
@@ -41,13 +40,13 @@ public class SchemaScore implements RuleBasis{
         }
 
         if (totalSchemas.get() == 0) {
-            feedback.append("No schemas found in components or inline.");
+            feedback.append("No schemas found in components or inline. ");
             return 0;
         }
 
         double ratio = (double) validSchemas.get() / totalSchemas.get();
         double score = ratio * getWeight();
-        if (score != getWeight()) feedback.append("Some schemas are incomplete or missing.");
+        if (score != getWeight()) feedback.append("Some schemas are incomplete or missing. ");
         return score;
     }
 
@@ -60,7 +59,7 @@ public class SchemaScore implements RuleBasis{
                 if (isValidSchema(schema)) {
                     validSchemas.incrementAndGet();
                 } else {
-                    feedback.append("Component schema `").append(entry.getKey()).append("` is incomplete.");
+                    feedback.append("Component schema `").append(entry.getKey()).append("` is incomplete. ");
                 }
             }
         }

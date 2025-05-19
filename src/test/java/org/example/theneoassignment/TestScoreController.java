@@ -10,15 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -34,12 +32,6 @@ public class TestScoreController {
     @MockBean
     private ScoreService scoreService;
 
-    private String loadAPI() throws IOException {
-        InputStream is = getClass().getClassLoader().getResourceAsStream("unit_tests/max-schemas.json");
-        assertNotNull(is);
-        return new String(is.readAllBytes(), StandardCharsets.UTF_8);
-    }
-
     @Test
     void validSpecTest() throws Exception {
         Result mockResult = new Result();
@@ -50,7 +42,7 @@ public class TestScoreController {
         mockReport.setResult(mockResult);
 
         when(scoreService.score(any(OpenAPI.class))).thenReturn(mockReport);
-        String content = loadAPI();
+        String content = Files.readString(Paths.get("src/test/resources/unit_tests/max-schemas.json"));
         mockMvc.perform(post("/api/score")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))

@@ -22,10 +22,10 @@ public class ScoreController {
     public Report scoreSpec(@RequestBody String openApiSpec) {
         if (openApiSpec == null || openApiSpec.trim().isEmpty()) {
             logger.info("Bad request body.");
-            throw new IllegalArgumentException("Request body cannot be empty");
+            throw new IllegalArgumentException("Request body cannot be empty.");
         }
 
-        logger.info("Parsing OpenAPI spec");
+        logger.info("Parsing OpenAPI spec.");
         SwaggerParseResult parseResult = new OpenAPIV3Parser().readContents(openApiSpec, null, null);
         OpenAPI openAPI = parseResult.getOpenAPI();
 
@@ -33,7 +33,7 @@ public class ScoreController {
             throw new IllegalArgumentException("Invalid OpenAPI specification.");
         }
 
-        logger.info("Grading OpenAPI spec");
+        logger.info("Grading OpenAPI spec.");
         return scoreService.score(openAPI);
     }
 }

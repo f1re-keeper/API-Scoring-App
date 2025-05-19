@@ -29,7 +29,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("good-crud-naming.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(15.0, result.getRuleBreakdown().get("Paths & Operations"));
+        assertEquals(15.0, result.getRuleBreakdown().get("Paths & Operations (15 pts)"));
         assertFalse(result.getFeedback().contains("does not follow CRUD naming"));
     }
 
@@ -39,7 +39,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("bad-crud-naming.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertTrue(result.getRuleBreakdown().get("Paths & Operations") < 10.0);
+        assertTrue(result.getRuleBreakdown().get("Paths & Operations (15 pts)") < 15.0);
         assertTrue(result.getFeedback().contains("does not follow CRUD naming"));
     }
 
@@ -50,7 +50,7 @@ public class UnitTests {
         Report report = scorer.score(api);
         Result result = report.getResult();
         String feedback = result.getFeedback();
-        assertTrue(result.getRuleBreakdown().get("Paths & Operations") < 10.0);
+        assertTrue(result.getRuleBreakdown().get("Paths & Operations (15 pts)") < 15.0);
         assertTrue(feedback.contains("Path does not start with '/'"));
         assertTrue(feedback.contains("No operations defined for path: /no-op"));
         assertTrue(feedback.contains("Duplicate operation ID: dupOpId"));
@@ -62,7 +62,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("no-security.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(0.0, result.getRuleBreakdown().get("Security Schemes"));
+        assertEquals(0.0, result.getRuleBreakdown().get("Security Schemes (10 pts)"));
         assertTrue(result.getFeedback().contains("No security schemes"));
     }
 
@@ -72,7 +72,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("max-security.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(10.0, result.getRuleBreakdown().get("Security Schemes"));
+        assertEquals(10.0, result.getRuleBreakdown().get("Security Schemes (10 pts)"));
         assertFalse(result.getFeedback().contains("No security schemes"));
     }
 
@@ -82,7 +82,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("some-security.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertTrue(result.getRuleBreakdown().get("Security Schemes") < 10.0);
+        assertTrue(result.getRuleBreakdown().get("Security Schemes (10 pts)") < 10.0);
         assertFalse(result.getFeedback().contains("No security schemes"));
         assertTrue(result.getFeedback().contains("Security schemes defined but not applied to any operations."));
     }
@@ -93,7 +93,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("missing-descriptions.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertTrue(result.getRuleBreakdown().get("Descriptions & Documentation") < 10.0);
+        assertTrue(result.getRuleBreakdown().get("Descriptions & Documentation (20 pts)") < 20.0);
         assertTrue(result.getFeedback().contains("Missing some descriptions"));
     }
 
@@ -103,7 +103,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("max-descriptions.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(result.getRuleBreakdown().get("Descriptions & Documentation"),  20.0);
+        assertEquals(result.getRuleBreakdown().get("Descriptions & Documentation (20 pts)"),  20.0);
         assertFalse(result.getFeedback().contains("Missing some descriptions"));
     }
 
@@ -113,7 +113,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("max-schemas.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(result.getRuleBreakdown().get("Schema & Types"),  20.0);
+        assertEquals(result.getRuleBreakdown().get("Schema & Types (20 pts)"),  20.0);
         assertFalse(result.getFeedback().contains("No schemas found in components or inline."));
     }
 
@@ -123,7 +123,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("max-misc.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertTrue(result.getRuleBreakdown().get("Schema & Types") < 20.0);
+        assertTrue(result.getRuleBreakdown().get("Schema & Types (20 pts)") < 20.0);
         assertTrue(result.getFeedback().contains("Some schemas are incomplete or missing."));
     }
 
@@ -133,7 +133,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("no-schema.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(result.getRuleBreakdown().get("Schema & Types"), 0);
+        assertEquals(result.getRuleBreakdown().get("Schema & Types (20 pts)"), 0);
         assertTrue(result.getFeedback().contains("No schemas found in components or inline."));
     }
 
@@ -143,7 +143,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("no-response-codes.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(result.getRuleBreakdown().get("Response Codes"), 0);
+        assertEquals(result.getRuleBreakdown().get("Response Codes (15 pts)"), 0);
         assertTrue(result.getFeedback().contains("No response codes"));
     }
 
@@ -153,7 +153,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("max-schemas.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertTrue(result.getRuleBreakdown().get("Response Codes") > 0);
+        assertTrue(result.getRuleBreakdown().get("Response Codes (15 pts)") > 0);
         assertFalse(result.getFeedback().contains("No response codes"));
     }
 
@@ -163,7 +163,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("with-examples.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertTrue(0 < result.getRuleBreakdown().get("Request/Response Examples"));
+        assertTrue(0 < result.getRuleBreakdown().get("Request/Response Examples (10 pts)"));
         assertFalse(result.getFeedback().contains("No examples provided in request/response bodies."));
     }
 
@@ -173,7 +173,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("bad-misc.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(0, result.getRuleBreakdown().get("Request/Response Examples"));
+        assertEquals(0, result.getRuleBreakdown().get("Request/Response Examples (10 pts)"));
         assertTrue(result.getFeedback().contains("No examples provided in request/response bodies."));
     }
 
@@ -183,7 +183,7 @@ public class UnitTests {
         OpenAPI api = loadOpenApi("max-misc.json");
         Report report = scorer.score(api);
         Result result = report.getResult();
-        assertEquals(result.getRuleBreakdown().get("Miscellaneous Best Practices"), 10.0);
+        assertEquals(result.getRuleBreakdown().get("Miscellaneous Best Practices (10 pts)"), 10.0);
     }
 
     @Test
@@ -193,7 +193,7 @@ public class UnitTests {
         Report report = scorer.score(api);
         Result result = report.getResult();
         String feedback = result.getFeedback();
-        assertEquals(result.getRuleBreakdown().get("Miscellaneous Best Practices"), 0);
+        assertEquals(result.getRuleBreakdown().get("Miscellaneous Best Practices (10 pts)"), 0);
         assertTrue(feedback.contains("API version not found."));
         assertTrue(feedback.contains("Servers array not found."));
         assertTrue(feedback.contains("Tags not found."));

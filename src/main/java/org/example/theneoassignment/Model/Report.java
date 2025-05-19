@@ -2,23 +2,17 @@ package org.example.theneoassignment.Model;
 
 import lombok.*;
 
-import java.util.*;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class Report {
-    private Result result;
     private String grade = "";
-
-    public double getTotalScore() {
-        return result.getScore();
-    }
+    private Result result;
 
     public void calculateGrade() {
-        double pct = getTotalScore();
+        double pct = result.getScore();
         grade = pct >= 90 ? "A" :
                 pct >= 80 ? "B" :
                         pct >= 70 ? "C" :

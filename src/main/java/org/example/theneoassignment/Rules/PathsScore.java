@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class PathsScore implements RuleBasis{
     @Override
     public String getName() {
-        return "Paths & Operations";
+        return "Paths & Operations (15 pts)";
     }
 
     @Override
@@ -21,14 +21,14 @@ public class PathsScore implements RuleBasis{
     @Override
     public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
         if (openAPI.getPaths() == null) {
-            feedback.append("No paths defined.");
+            feedback.append("No paths defined. ");
             return 0;
         }
 
         int validOps = 0;
         int totalOps = 0;
         Set<String> operationIds = new HashSet<>();
-        Pattern crudPattern = Pattern.compile("(?i)^(get|list|create|update|delete|find|add|remove|post|put|patch)[A-Z_].*");
+        Pattern crudPattern = Pattern.compile("^(get|list|create|update|delete|find|add|remove|post|put|patch)[A-Za-z0-9_]+$");
 
         for (Map.Entry<String, PathItem> entry : openAPI.getPaths().entrySet()) {
             String path = entry.getKey();
@@ -61,12 +61,8 @@ public class PathsScore implements RuleBasis{
         if (totalOps == 0) return 0;
 
         double ratio = (double) validOps / totalOps;
-        double score = ratio * getWeight();
 
-        if (ratio < 0.5) return getWeight() / 3.0;
-        if (ratio < 0.75) return getWeight() / 2.0;
-
-        return score;
+        return ratio * getWeight();
     }
 
 }

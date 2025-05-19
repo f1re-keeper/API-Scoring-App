@@ -5,7 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 public class DescriptionScore implements RuleBasis {
     @Override
     public String getName() {
-        return "Descriptions & Documentation";
+        return "Descriptions & Documentation (20 pts)";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DescriptionScore implements RuleBasis {
         }
 
         if (totalOps == 0) {
-            feedback.append("No operations to document.");
+            feedback.append("No operations to document. ");
             return 0;
         }
 
@@ -43,7 +43,7 @@ public class DescriptionScore implements RuleBasis {
         double score = Math.round(ratio * getWeight());
 
         if (score < getWeight()) {
-            feedback.append("Missing some descriptions.");
+            feedback.append("Missing some descriptions. ");
         }
 
         return score;

@@ -10,7 +10,7 @@ import java.util.*;
 public class ResponseCodeScore implements RuleBasis{
     @Override
     public String getName() {
-        return "Response Codes";
+        return "Response Codes (15 pts)";
     }
 
     @Override
@@ -29,21 +29,21 @@ public class ResponseCodeScore implements RuleBasis{
                 totalOps++;
                 Map<String, ApiResponse> responses = operation.getResponses();
                 if(responses == null) {
-                    feedback.append("No response codes: ").append(entry.getKey()).append(".");
+                    feedback.append("No response codes: ").append(entry.getKey()).append(". ");
                     continue;
                 }
                 boolean hasUsefulCodes = responses.keySet().stream().anyMatch(code ->
                         code.startsWith("2") || code.startsWith("4") || code.startsWith("5")
                 );
                 if (responses.isEmpty() || !hasUsefulCodes) {
-                    feedback.append("No response codes: ").append(entry.getKey()).append(".");
+                    feedback.append("No response codes: ").append(entry.getKey()).append(". ");
                 } else {
                     validOps++;
                 }
             }
         }
         double score = ((validOps / (double) totalOps) * getWeight());
-        if(score!=getWeight()) feedback.append("Lacking useful codes.");
+        if(score!=getWeight()) feedback.append("Lacking useful codes. ");
         return score;
     }
 }

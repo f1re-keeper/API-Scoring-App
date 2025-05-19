@@ -1,15 +1,11 @@
 package org.example.theneoassignment.Rules;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.PathItem;
-
-import java.util.Map;
 
 public class ReqResScore implements RuleBasis{
     @Override
     public String getName() {
-        return "Request/Response Examples";
+        return "Request/Response Examples (10 pts)";
     }
 
     @Override
@@ -20,32 +16,44 @@ public class ReqResScore implements RuleBasis{
     @Override
     public double calculateScore(OpenAPI openAPI, StringBuilder feedback) {
         int count = 0;
+        int totalOps = 0;
 
         if (openAPI.getPaths() != null) {
             for (var entry : openAPI.getPaths().entrySet()) {
                 for (var op : entry.getValue().readOperations()) {
                     if(op.getResponses() == null) break;
-                    boolean hasExample =
-                            (op.getRequestBody() != null && op.getRequestBody().getContent() != null &&
-                                    op.getRequestBody().getContent().values().stream().anyMatch(media ->
-                                            media.getExamples() != null || media.getExample() != null)) ||
-                                    op.getResponses().values().stream().anyMatch(resp ->
-                                            resp.getContent() != null && resp.getContent().values().stream().anyMatch(media ->
-                                                    media.getExamples() != null || media.getExample() != null));
+                    totalOps++;
+                    boolean hasResponseExample = op.getResponses() != null &&
+                            op.getResponses().values().stream().anyMatch(resp ->
+                                    resp.getContent() != null &&
+                                            resp.getContent().values().stream().anyMatch(media ->
+                                                    media.getExamples() != null && !media.getExamples().isEmpty() ||
+                                                            media.getExample() != null
+                                            )
+                            );
 
-                    if (hasExample) count++;
+                    boolean hasRequestExample = op.getRequestBody() != null &&
+                            op.getRequestBody().getContent() != null &&
+                            op.getRequestBody().getContent().values().stream().anyMatch(media ->
+                                    media.getExamples() != null && !media.getExamples().isEmpty() ||
+                                            media.getExample() != null
+                            );
+
+                    if (hasRequestExample || hasResponseExample) {
+                        count++;
+                    }
                 }
             }
         }
 
-        if (count < 1) {
-            feedback.append("No examples provided in request/response bodies.\n");
+        if (count == 0) {
+            feedback.append("No examples provided in request/response bodies. ");
             return 0;
         } else if (count < getWeight()/2) {
-            feedback.append("Only a few examples provided.\n");
+            feedback.append("Only a few examples provided. ");
             return 5;
         } else {
-            return getWeight();
+            return (double)count / totalOps * getWeight();
         }
     }
 }

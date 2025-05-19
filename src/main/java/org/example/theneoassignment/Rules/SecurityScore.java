@@ -5,7 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 public class SecurityScore implements RuleBasis{
     @Override
     public String getName() {
-        return "Security Schemes";
+        return "Security Schemes (10 pts)";
     }
 
     @Override
@@ -24,11 +24,11 @@ public class SecurityScore implements RuleBasis{
             if (usedInPaths) {
                 return getWeight();
             } else {
-                feedback.append("Security schemes defined but not applied to any operations.");
+                feedback.append("Security schemes defined but not applied to any operations. ");
                 return getWeight() / 2.0;
             }
         }
-        feedback.append("No security schemes defined.");
+        feedback.append("No security schemes defined. ");
         return 0;
     }
 }
